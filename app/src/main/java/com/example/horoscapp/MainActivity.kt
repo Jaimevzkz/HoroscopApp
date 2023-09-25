@@ -62,7 +62,7 @@ fun horoscopeApp() {
                         currentScreen = currentScreen
                     )
                 }
-            }
+            } //Hola prueba git
         ) { innerPadding ->
             horoscopeNavHost(navController, innerPadding)
         }
