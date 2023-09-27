@@ -1,4 +1,4 @@
-package com.example.horoscapp
+package com.example.horoscapp.ui
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FrontHand
@@ -10,17 +10,17 @@ interface HoroscDestinations {
     val icon: ImageVector
     val route: String
 }
-object Horoscope: HoroscDestinations{
+object Horoscope: HoroscDestinations {
     override val icon = Icons.Filled.Waves
     override val route = "Horoscope"
 
 }
-object Luck: HoroscDestinations{
+object Luck: HoroscDestinations {
     override val icon = Icons.Filled.Style
     override val route = "Luck"
 
 }
-object Palmistry: HoroscDestinations{
+object Palmistry: HoroscDestinations {
     override val icon = Icons.Filled.FrontHand
     override val route = "Palmistry"
 }

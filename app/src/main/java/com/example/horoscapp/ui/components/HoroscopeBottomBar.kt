@@ -1,14 +1,8 @@
 package com.example.horoscapp.ui.components
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material.icons.Icons
@@ -21,11 +15,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import com.example.horoscapp.HoroscDestinations
-import com.example.horoscapp.Horoscope
-import com.example.horoscapp.Luck
-import com.example.horoscapp.Palmistry
+import com.example.horoscapp.ui.HoroscDestinations
+import com.example.horoscapp.ui.Horoscope
+import com.example.horoscapp.ui.Luck
+import com.example.horoscapp.ui.Palmistry
 import com.example.horoscapp.ui.theme.accent
 import com.example.horoscapp.ui.theme.primaryDark
 import com.example.horoscapp.ui.theme.secondary

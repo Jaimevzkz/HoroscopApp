@@ -1,4 +1,4 @@
-package com.example.horoscapp
+package com.example.horoscapp.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -8,11 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -24,6 +20,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.horoscapp.R
 import com.example.horoscapp.ui.components.HoroscopeBottomBar
 import com.example.horoscapp.ui.components.HoroscopeTopAppBar
 import com.example.horoscapp.ui.horoscope.HoroscopeScreen
@@ -31,9 +28,12 @@ import com.example.horoscapp.ui.luck.LuckScreen
 import com.example.horoscapp.ui.palmistry.PalmistryScreen
 import com.example.horoscapp.ui.theme.HoroscappTheme
 import com.example.horoscapp.ui.theme.accent
+import com.example.horoscapp.ui.theme.primary
 import com.example.horoscapp.ui.theme.primaryDark
 import com.example.horoscapp.ui.theme.secondary
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -97,7 +97,7 @@ fun horoscopeNavHost(navController: NavHostController, innerPadding: PaddingValu
         modifier = Modifier.padding(innerPadding)
     ) {
         composable(route = Horoscope.route) {
-            HoroscopeScreen()
+            HoroscopeScreen(backGroundColor = primary)
         }
         composable(route = Luck.route) {
             LuckScreen()

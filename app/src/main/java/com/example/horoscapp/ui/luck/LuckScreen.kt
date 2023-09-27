@@ -9,6 +9,8 @@ import com.example.horoscapp.ui.theme.secondary
 
 @Composable
 fun LuckScreen() {
+
+
     Surface(modifier = Modifier.fillMaxSize(), color = secondary) {
 
     }
