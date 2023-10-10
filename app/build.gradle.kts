@@ -81,6 +81,13 @@ dependencies {
     val hiltVersion = "2.48"
     implementation("com.google.dagger:hilt-android:$hiltVersion")
     kapt("com.google.dagger:hilt-compiler:$hiltVersion")
+    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+
+
+    //ViewModel
+    val lifecycleVersion = "2.6.2"
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycleVersion")
+
 
 
 

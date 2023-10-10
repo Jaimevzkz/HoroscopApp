@@ -15,23 +15,30 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.horoscapp.R
+import com.example.horoscapp.domain.model.HoroscopeModel
 import com.example.horoscapp.ui.components.HoroscopeBottomBar
 import com.example.horoscapp.ui.components.HoroscopeTopAppBar
+import com.example.horoscapp.ui.detail.HoroscopeDetailScreen
 import com.example.horoscapp.ui.horoscope.HoroscopeScreen
+import com.example.horoscapp.ui.horoscope.HoroscopeViewModel
 import com.example.horoscapp.ui.luck.LuckScreen
 import com.example.horoscapp.ui.palmistry.PalmistryScreen
 import com.example.horoscapp.ui.theme.HoroscappTheme
 import com.example.horoscapp.ui.theme.accent
 import com.example.horoscapp.ui.theme.primary
 import com.example.horoscapp.ui.theme.primaryDark
+import com.example.horoscapp.ui.theme.red
 import com.example.horoscapp.ui.theme.secondary
 import dagger.hilt.android.AndroidEntryPoint
+
+val BACKGROUND_COLOR = primary
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -61,11 +68,12 @@ fun horoscopeApp() {
                 CenterAlignedTopAppBar(
                     colors = TopAppBarDefaults.largeTopAppBarColors(containerColor = primaryDark),
                     title = {
-                    HoroscopeTopAppBar(
-                        text = stringResource(R.string.app_name),
-                        contentColor = secondary
-                    )
-                }, )
+                        HoroscopeTopAppBar(
+                            text = stringResource(R.string.app_name),
+                            contentColor = secondary
+                        )
+                    },
+                )
 
             },
             bottomBar = {
@@ -97,13 +105,29 @@ fun horoscopeNavHost(navController: NavHostController, innerPadding: PaddingValu
         modifier = Modifier.padding(innerPadding)
     ) {
         composable(route = Horoscope.route) {
-            HoroscopeScreen(backGroundColor = primary)
+            val horoscopeViewModel = hiltViewModel<HoroscopeViewModel>()
+            HoroscopeScreen(
+                horoscopeViewModel = horoscopeViewModel,
+                backGroundColor = BACKGROUND_COLOR,
+                onItemSelected = { horoscopeModelArg ->
+                    navController.navigateToDetail(horoscopeModelArg)
+                })
         }
         composable(route = Luck.route) {
             LuckScreen()
         }
         composable(route = Palmistry.route) {
             PalmistryScreen()
+        }
+        composable(
+            route = Detail.routeWithArgs,
+            arguments = Detail.arguments
+        ) { navBackStackEntry -> //navBackStackEntry saves data for the actual route
+            //retrieve argument
+            val horoscopeModel =
+                navBackStackEntry.arguments?.getString(Detail.horoscopeModelArg)
+                    ?: "Aries"
+            HoroscopeDetailScreen(horoscopeModelArg = horoscopeModel, backGroundColor = red)
         }
     }
 }
@@ -112,6 +136,10 @@ private fun NavHostController.navigateSingleTopTo(route: String) {
     this.navigate(route) {
         launchSingleTop = true
     }
+}
+
+private fun NavHostController.navigateToDetail(horoscopeModelArg: String) {
+    this.navigateSingleTopTo("${Detail.route}/$horoscopeModelArg")
 }
 
 @Preview

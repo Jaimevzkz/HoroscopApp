@@ -1,10 +1,14 @@
 package com.example.horoscapp.ui
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Details
 import androidx.compose.material.icons.filled.FrontHand
 import androidx.compose.material.icons.filled.Style
 import androidx.compose.material.icons.filled.Waves
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
+import com.example.horoscapp.domain.model.HoroscopeModel
 
 interface HoroscDestinations {
     val icon: ImageVector
@@ -18,11 +22,19 @@ object Horoscope: HoroscDestinations {
 object Luck: HoroscDestinations {
     override val icon = Icons.Filled.Style
     override val route = "Luck"
-
 }
 object Palmistry: HoroscDestinations {
     override val icon = Icons.Filled.FrontHand
     override val route = "Palmistry"
+}
+object Detail: HoroscDestinations {
+    override val icon = Icons.Filled.Details
+    override val route = "Detail"
+    const val horoscopeModelArg = "horoscopeModelArg"
+    val routeWithArgs = "${route}/{${horoscopeModelArg}}"
+    //Arguments passed to the screen
+    val arguments = listOf(navArgument(horoscopeModelArg) { type = NavType.StringType })
+
 }
 
 
