@@ -14,8 +14,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.horoscapp.ui.HoroscDestinations
+import com.example.horoscapp.ui.HoroscHomeDestinations
 import com.example.horoscapp.ui.Horoscope
 import com.example.horoscapp.ui.Luck
 import com.example.horoscapp.ui.Palmistry
@@ -25,11 +28,15 @@ import com.example.horoscapp.ui.theme.secondary
 
 @Composable
 fun HoroscopeBottomBar(
-    allScreens: List<HoroscDestinations>,
-    onTabSelected: (HoroscDestinations) -> (Unit),
-    currentScreen: HoroscDestinations
+    allScreens: List<HoroscHomeDestinations>,
+    onTabSelected: (HoroscHomeDestinations) -> (Unit),
+    currentScreen: HoroscHomeDestinations
 ) {
-    Row(Modifier.selectableGroup().background(primaryDark).fillMaxWidth()) {
+    Row(
+        Modifier
+            .selectableGroup()
+            .background(primaryDark)
+            .fillMaxWidth()) {
         allScreens.forEach { screen ->
             bottomBarButton(
                 text = screen.route,
@@ -52,7 +59,7 @@ private fun bottomBarButton(
     modifier: Modifier,
     selected: Boolean
 ) {
-    val color = if(selected) secondary else accent
+    val color = if (selected) secondary else accent
     Column(
         modifier = modifier
             .selectable(
@@ -67,7 +74,12 @@ private fun bottomBarButton(
             contentDescription = text,
             tint = color
         )
-        Text(text = text, color = color)
+        Text(
+            text = text,
+            color = color,
+            fontWeight = FontWeight.Normal,
+            fontFamily = FontFamily.Default
+        )
     }
 }
 
