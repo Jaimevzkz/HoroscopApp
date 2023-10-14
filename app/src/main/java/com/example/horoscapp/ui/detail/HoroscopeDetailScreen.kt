@@ -13,9 +13,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIos
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -49,8 +52,24 @@ fun HoroscopeDetailScreen(
     backGroundColor: Color
 ) {
     val horoscopeModel = horoscopeModelArg.toHoroscopeModel()
+    val detail by horoscopeDetailViewModel.state.collectAsState()
+    intiUI(detail)
+    drawUI(modifier, backGroundColor, onBackClicked, horoscopeModelArg)
+}
+
+@Composable
+private fun drawUI(
+    modifier: Modifier,
+    backGroundColor: Color,
+    onBackClicked: () -> Unit,
+    horoscopeModelArg: String
+) {
     Column(modifier = modifier.background(backGroundColor)) {
-        IconButton(onClick = onBackClicked, modifier = modifier.padding(top = 30.dp, bottom = 10.dp, start = 30.dp, end = 10.dp).size(30.dp)) {
+        IconButton(onClick = onBackClicked,
+            modifier = modifier
+                .padding(top = 30.dp, bottom = 10.dp, start = 30.dp, end = 10.dp)
+                .size(30.dp)
+        ) {
             Icon(
                 imageVector = Icons.Filled.ArrowBackIos,
                 tint = gold,
@@ -87,6 +106,32 @@ fun HoroscopeDetailScreen(
         }
     }
 }
+
+fun intiUI(detail: HoroscopeDetailState) {
+    initUIState(detail)
+
+}
+
+fun initUIState(detail: HoroscopeDetailState) {
+    when(detail){
+        HoroscopeDetailState.Loading -> LoadingState()
+        is HoroscopeDetailState.Error -> ErrorState()
+        is HoroscopeDetailState.Success -> SuccessState()
+    }
+}
+
+private fun LoadingState(){
+
+}
+
+private fun ErrorState(){
+
+}
+
+private fun SuccessState(){
+
+}
+
 
 private fun String.toHoroscopeModel(): HoroscopeModel = when (this) {
     "Aries" -> Aries
