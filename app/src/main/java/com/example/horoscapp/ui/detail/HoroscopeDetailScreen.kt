@@ -11,11 +11,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIos
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -28,16 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.horoscapp.R
 import com.example.horoscapp.domain.model.HoroscopeModel
-import com.example.horoscapp.domain.model.HoroscopeModel.Aries
-import com.example.horoscapp.domain.model.HoroscopeModel.Cancer
-import com.example.horoscapp.domain.model.HoroscopeModel.Gemini
-import com.example.horoscapp.domain.model.HoroscopeModel.Leo
-import com.example.horoscapp.domain.model.HoroscopeModel.Libra
-import com.example.horoscapp.domain.model.HoroscopeModel.Pisces
-import com.example.horoscapp.domain.model.HoroscopeModel.Sagittarius
-import com.example.horoscapp.domain.model.HoroscopeModel.Scorpio
-import com.example.horoscapp.domain.model.HoroscopeModel.Taurus
-import com.example.horoscapp.domain.model.HoroscopeModel.Virgo
+import com.example.horoscapp.domain.model.HoroscopeModel.*
 import com.example.horoscapp.ui.BACKGROUND_COLOR
 import com.example.horoscapp.ui.components.HoroscopeBodyText
 import com.example.horoscapp.ui.components.HoroscopeTitleText
@@ -51,21 +44,52 @@ fun HoroscopeDetailScreen(
     onBackClicked: () -> Unit,
     backGroundColor: Color
 ) {
+    //DrawUI(modifier, backGroundColor, onBackClicked)
     val horoscopeModel = horoscopeModelArg.toHoroscopeModel()
-    val detail by horoscopeDetailViewModel.state.collectAsState()
-    intiUI(detail)
-    drawUI(modifier, backGroundColor, onBackClicked, horoscopeModelArg)
+    val state by horoscopeDetailViewModel.state.collectAsState()
+    horoscopeDetailViewModel.getPrediction(horoscopeModel)
+
+    when (state) {
+        is HoroscopeDetailState.Success -> DrawUI(
+            modifier = modifier,
+            backGroundColor = backGroundColor,
+            onBackClicked = onBackClicked,
+            state = (state as HoroscopeDetailState.Success)
+        )
+
+        is HoroscopeDetailState.Loading -> DrawProgressbar(
+            modifier = modifier,
+            backGroundColor = backGroundColor
+        )
+
+        is HoroscopeDetailState.Error -> DrawError(
+            (state as HoroscopeDetailState.Error).error
+        )
+    }
 }
 
 @Composable
-private fun drawUI(
+private fun DrawUI(
     modifier: Modifier,
     backGroundColor: Color,
     onBackClicked: () -> Unit,
-    horoscopeModelArg: String
+    state: HoroscopeDetailState.Success
 ) {
+    val image = when (state.horoscopeModel) {
+        Aries -> R.drawable.detail_aries
+        Taurus -> R.drawable.detail_taurus
+        Gemini -> R.drawable.detail_gemini
+        Cancer -> R.drawable.detail_cancer
+        Leo -> R.drawable.detail_leo
+        Virgo -> R.drawable.detail_virgo
+        Libra -> R.drawable.detail_libra
+        Scorpio -> R.drawable.detail_scorpio
+        Sagittarius -> R.drawable.detail_sagittarius
+        Pisces -> R.drawable.detail_pisces
+    }
     Column(modifier = modifier.background(backGroundColor)) {
-        IconButton(onClick = onBackClicked,
+        IconButton(
+            onClick = onBackClicked,
             modifier = modifier
                 .padding(top = 30.dp, bottom = 10.dp, start = 30.dp, end = 10.dp)
                 .size(30.dp)
@@ -86,13 +110,12 @@ private fun drawUI(
             Image(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(380.dp)
+                    .height(320.dp)
                     .padding(10.dp),
-                painter = painterResource(id = R.drawable.detail_aquarius),
+                painter = painterResource(id = image),
                 contentDescription = "Hola"
             )
-            HoroscopeTitleText(text = horoscopeModelArg)
-
+            HoroscopeTitleText(text = state.sign)
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -100,38 +123,39 @@ private fun drawUI(
                 contentAlignment = Alignment.TopCenter
             ) {
                 HoroscopeBodyText(
-                    text = "ajjfkjwelkfj wlkewmfwlkef wkjelfkwjefklw lwkefjlkwejflk welkfjwlkefwlke wekjf2'pejfw wlkflkwf kejfwlkefkqñwe wlkefjlwkefjñlkqe walkejflqkwñejf ejkfljwqlkjeflkqwev aaja"
+                    text = state.prediction
                 )
             }
         }
     }
 }
 
-fun intiUI(detail: HoroscopeDetailState) {
-    initUIState(detail)
-
-}
-
-fun initUIState(detail: HoroscopeDetailState) {
-    when(detail){
-        HoroscopeDetailState.Loading -> LoadingState()
-        is HoroscopeDetailState.Error -> ErrorState()
-        is HoroscopeDetailState.Success -> SuccessState()
+@Composable
+private fun DrawProgressbar(modifier: Modifier = Modifier, backGroundColor: Color) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .background(backGroundColor),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        CircularProgressIndicator(
+            modifier = Modifier.width(64.dp),
+            color = gold
+        )
     }
 }
 
-private fun LoadingState(){
-
+@Composable
+private fun DrawError(error: String) {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(text = error)
+    }
 }
-
-private fun ErrorState(){
-
-}
-
-private fun SuccessState(){
-
-}
-
 
 private fun String.toHoroscopeModel(): HoroscopeModel = when (this) {
     "Aries" -> Aries
@@ -152,10 +176,16 @@ private fun String.toHoroscopeModel(): HoroscopeModel = when (this) {
 
 @Preview
 @Composable
-private fun detailScreenPreview() {
-    HoroscopeDetailScreen(
-        horoscopeModelArg = "Aries",
+private fun DetailScreenPreview() {
+    val state = HoroscopeDetailState.Success(
+        "Aries",
+        "asljdkakfla sakdlfakdfaldsf asdkljfalksfl lskdjfadskflaslkdfjaksldfj akdljfalksdfkldajvl aslkdjaksdjfkadfj askdljflkasdjflkad askdlfaksdjfenbvdsb asdklcjadsnvaslkdnv",
+        Aries
+    )
+    DrawUI(
+        modifier = Modifier,
         backGroundColor = BACKGROUND_COLOR,
-        onBackClicked = {}
+        onBackClicked = {},
+        state = state
     )
 }
