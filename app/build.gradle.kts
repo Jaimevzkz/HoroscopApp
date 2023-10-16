@@ -23,12 +23,18 @@ android {
     }
 
     buildTypes {
-        release {
+        getByName("release") {
             isMinifyEnabled = false
+            isDebuggable = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            buildConfigField("String", "BASE_URL", "\"https://newastro.vercel.app/\"") //This would be the url used in production
+        }
+        getByName("debug") {
+            buildConfigField("String", "BASE_URL", "\"https://newastro.vercel-debug.app/\"") //This would be the url used in debugging
+            isDebuggable = true
         }
     }
     compileOptions {
@@ -40,6 +46,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.4.3"
@@ -90,6 +97,9 @@ dependencies {
     //Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    //Interceptor
+    implementation("com.squareup.okhttp3:logging-interceptor:4.3.1")
 
 
 
