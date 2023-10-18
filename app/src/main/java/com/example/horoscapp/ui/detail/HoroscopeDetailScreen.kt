@@ -44,11 +44,8 @@ fun HoroscopeDetailScreen(
     onBackClicked: () -> Unit,
     backGroundColor: Color
 ) {
-    //DrawUI(modifier, backGroundColor, onBackClicked)
     val horoscopeModel = horoscopeModelArg.toHoroscopeModel()
     val state by horoscopeDetailViewModel.state.collectAsState()
-    horoscopeDetailViewModel.getPrediction(horoscopeModel)
-
     when (state) {
         is HoroscopeDetailState.Success -> DrawUI(
             modifier = modifier,
@@ -57,10 +54,13 @@ fun HoroscopeDetailScreen(
             state = (state as HoroscopeDetailState.Success)
         )
 
-        is HoroscopeDetailState.Loading -> DrawProgressbar(
-            modifier = modifier,
-            backGroundColor = backGroundColor
-        )
+        is HoroscopeDetailState.Loading -> {
+            DrawProgressbar(
+                modifier = modifier,
+                backGroundColor = backGroundColor
+            )
+            horoscopeDetailViewModel.getPrediction(horoscopeModel)
+        }
 
         is HoroscopeDetailState.Error -> DrawError(
             (state as HoroscopeDetailState.Error).error

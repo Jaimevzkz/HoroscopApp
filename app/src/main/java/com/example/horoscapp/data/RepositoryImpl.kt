@@ -6,7 +6,7 @@ import com.example.horoscapp.domain.Repository
 import com.example.horoscapp.domain.model.PredictionModel
 import javax.inject.Inject
 
-class RepositoryImpl @Inject constructor(private val apiService: HoroscopeApiService): Repository {
+class RepositoryImpl @Inject constructor(private val apiService: HoroscopeApiService) : Repository {
     override suspend fun getPrediction(sign: String): PredictionModel? {
         runCatching {
             apiService.getHoroscopeSign(sign)
@@ -17,6 +17,7 @@ class RepositoryImpl @Inject constructor(private val apiService: HoroscopeApiSer
             .onFailure {
                 Log.i("Jaime", "An error ocurred while using apiService, ${it.message}")
             }
+        //return apiService.getHoroscopeSign(sign).toDomain()
         return null
     }
 }

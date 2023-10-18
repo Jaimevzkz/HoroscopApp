@@ -24,7 +24,7 @@ class HoroscopeDetailViewModel @Inject constructor(private val getPredictionUseC
     fun getPrediction(horoscopeModel: HoroscopeModel) {
         horoscope = horoscopeModel
         viewModelScope.launch {
-            _state.value = HoroscopeDetailState.Loading
+            //_state.value = HoroscopeDetailState.Loading
             val result = withContext(Dispatchers.IO) { getPredictionUseCase(horoscopeModel.name) }
             if (result != null) {
                 Log.i("Jaime", "Retrofit Call")

@@ -25,7 +25,7 @@ android {
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
-            isDebuggable = false
+            isDebuggable = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -33,8 +33,13 @@ android {
             buildConfigField("String", "BASE_URL", "\"https://newastro.vercel.app/\"") //This would be the url used in production
         }
         getByName("debug") {
-            buildConfigField("String", "BASE_URL", "\"https://newastro.vercel-debug.app/\"") //This would be the url used in debugging
+            isMinifyEnabled = false
             isDebuggable = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+            buildConfigField("String", "BASE_URL", "\"https://newastro.vercel.app/\"") //This would be the url used in production
         }
     }
     compileOptions {

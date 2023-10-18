@@ -124,9 +124,7 @@ fun HoroscopeNavHost(navControllerHomeNavHost: NavHostController, onHoroscopeSel
             modifier = Modifier.padding(innerPadding)
         ) {
             composable(route = Horoscope.route) {
-                val horoscopeViewModel = hiltViewModel<HoroscopeViewModel>()
                 HoroscopeScreen(
-                    horoscopeViewModel = horoscopeViewModel,
                     backGroundColor = BACKGROUND_COLOR,
                     onItemSelected = { horoscopeModelArg ->
                         onHoroscopeSelected(horoscopeModelArg)
