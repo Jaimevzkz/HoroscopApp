@@ -1,5 +1,6 @@
 package com.example.horoscapp.ui
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -11,10 +12,14 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -23,47 +28,48 @@ import androidx.navigation.compose.rememberNavController
 import com.example.horoscapp.R
 import com.example.horoscapp.ui.components.HoroscopeBottomBar
 import com.example.horoscapp.ui.components.HoroscopeTopAppBar
+import com.example.horoscapp.ui.data.providers.RandomCardProvider
 import com.example.horoscapp.ui.detail.HoroscopeDetailScreen
 import com.example.horoscapp.ui.horoscope.HoroscopeScreen
-import com.example.horoscapp.ui.horoscope.HoroscopeViewModel
 import com.example.horoscapp.ui.luck.LuckScreen
 import com.example.horoscapp.ui.palmistry.PalmistryScreen
 import com.example.horoscapp.ui.theme.HoroscappTheme
 import com.example.horoscapp.ui.theme.accent
 import com.example.horoscapp.ui.theme.primary
 import com.example.horoscapp.ui.theme.primaryDark
-import com.example.horoscapp.ui.theme.red
 import dagger.hilt.android.AndroidEntryPoint
 
 val BACKGROUND_COLOR = primary
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            horoscopeApp()
+            HoroscopeApp()
         }
     }
 }
 
 @Composable
-fun horoscopeApp() {
+fun HoroscopeApp() {
     HoroscappTheme {
         val navControllerAllNavHost = rememberNavController()
         HoroscopeAllNavHost(navControllerAllNavHost)
     }
 
 }
+
 @Composable
-fun HoroscopeAllNavHost(navControllerAllNavHost: NavHostController){ //This is the root NavHost to navigate throw all child NavHosts
+fun HoroscopeAllNavHost(navControllerAllNavHost: NavHostController) { //This is the root NavHost to navigate throw all child NavHosts
     NavHost(
         navController = navControllerAllNavHost,
         startDestination = Home.route
     ) {
         composable(route = Home.route) {
             val navControllerHomeNavHost = rememberNavController()
-            HoroscopeNavHost(navControllerHomeNavHost){horoscopeModelArg ->
+            HoroscopeNavHost(navControllerHomeNavHost) { horoscopeModelArg ->
                 navControllerAllNavHost.navigateToDetail(horoscopeModelArg)
             }
         }
@@ -111,7 +117,9 @@ fun HoroscopeNavHost(navControllerHomeNavHost: NavHostController, onHoroscopeSel
                 HoroscopeBottomBar(
                     allScreens = horoscopeScreens,
                     onTabSelected = { newScreen ->
-                        navControllerHomeNavHost.navigateSingleTopTo(newScreen.route)
+                        if (currentScreen != newScreen) navControllerHomeNavHost.navigateSingleTopTo(
+                            newScreen.route
+                        )
                     },
                     currentScreen = currentScreen
                 )
@@ -131,13 +139,40 @@ fun HoroscopeNavHost(navControllerHomeNavHost: NavHostController, onHoroscopeSel
                     })
             }
             composable(route = Luck.route) {
-                LuckScreen()
+                val randomCardProvider = RandomCardProvider()
+                var sharePressed by remember { mutableStateOf(false) }
+                var shareContent by remember { mutableStateOf("") }
+                LuckScreen(
+                    backGroundColor = BACKGROUND_COLOR,
+                    randomCardProvider = randomCardProvider
+                ) { luck ->
+                    shareContent = luck
+                    sharePressed = true
+                }
+                if (sharePressed) {
+                    ShareResult(shareContent)
+                }
             }
             composable(route = Palmistry.route) {
-                PalmistryScreen()
+                PalmistryScreen(
+                    backGroundColor = BACKGROUND_COLOR
+                )
             }
         }
     }
+
+}
+
+@Composable
+fun ShareResult(luck: String) {
+    val sendIntent: Intent = Intent().apply {
+        action = Intent.ACTION_SEND
+        putExtra(Intent.EXTRA_TEXT, luck)
+        type = "text/plain"
+    }
+
+    val shareIntent = Intent.createChooser(sendIntent, null)
+    startActivity(LocalContext.current, shareIntent, null)
 
 }
 
@@ -153,8 +188,8 @@ private fun NavHostController.navigateToDetail(horoscopeModelArg: String) {
 
 @Preview
 @Composable
-fun horoscopePreview() {
+fun HoroscopePreview() {
     HoroscappTheme {
-        horoscopeApp()
+        HoroscopeApp()
     }
 }

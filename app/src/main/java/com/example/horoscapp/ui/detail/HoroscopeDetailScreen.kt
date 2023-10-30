@@ -30,7 +30,16 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.horoscapp.R
 import com.example.horoscapp.domain.model.HoroscopeModel
-import com.example.horoscapp.domain.model.HoroscopeModel.*
+import com.example.horoscapp.domain.model.HoroscopeModel.Aries
+import com.example.horoscapp.domain.model.HoroscopeModel.Cancer
+import com.example.horoscapp.domain.model.HoroscopeModel.Gemini
+import com.example.horoscapp.domain.model.HoroscopeModel.Leo
+import com.example.horoscapp.domain.model.HoroscopeModel.Libra
+import com.example.horoscapp.domain.model.HoroscopeModel.Pisces
+import com.example.horoscapp.domain.model.HoroscopeModel.Sagittarius
+import com.example.horoscapp.domain.model.HoroscopeModel.Scorpio
+import com.example.horoscapp.domain.model.HoroscopeModel.Taurus
+import com.example.horoscapp.domain.model.HoroscopeModel.Virgo
 import com.example.horoscapp.ui.BACKGROUND_COLOR
 import com.example.horoscapp.ui.components.HoroscopeBodyText
 import com.example.horoscapp.ui.components.HoroscopeTitleText
@@ -119,8 +128,8 @@ private fun DrawUI(
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(30.dp),
-                contentAlignment = Alignment.TopCenter
+                    .padding(24.dp),
+                contentAlignment = Alignment.Center
             ) {
                 HoroscopeBodyText(
                     text = state.prediction

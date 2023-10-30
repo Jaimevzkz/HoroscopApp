@@ -17,7 +17,6 @@ class RepositoryImpl @Inject constructor(private val apiService: HoroscopeApiSer
             .onFailure {
                 Log.i("Jaime", "An error ocurred while using apiService, ${it.message}")
             }
-        //return apiService.getHoroscopeSign(sign).toDomain()
         return null
     }
 }
