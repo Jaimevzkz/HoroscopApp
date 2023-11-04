@@ -115,6 +115,6 @@ fun ShowLuck(
 @Composable
 private fun LuckScreenPreview() {
     HoroscappTheme {
-        ShowLuck(Modifier.background(BACKGROUND_COLOR), RandomCardProvider()) {}
+        SpinRoulette(Modifier.background(BACKGROUND_COLOR)) {}
     }
 }
