@@ -95,13 +95,13 @@ fun SpinningRoulette(
 
         LaunchedEffect(rotationAnimated){
             if(rotationAnimated == ROTATION_DEGREES_ROULETTE){
-                verticalBias = -3f
+                verticalBias = -2.5f
                 alpha = 1f
             }
         }
 
         LaunchedEffect(verticalBiasAnimated){
-            if(verticalBiasAnimated == -3f){
+            if(verticalBiasAnimated == -2.5f){
                 delay(100)
                 cardWidth = (maxWidth / 7) * 2
             }
